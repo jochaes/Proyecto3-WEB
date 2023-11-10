@@ -16,7 +16,7 @@ admin.initializeApp({
 
 const firestore = admin.firestore();
 
-const allowedOrigins = ["http://192.168.100.2:3006", "http://localhost:3006", "formularios-6d195.web.app", "formularios-6d195.firebaseapp.com"] // Add the allowed origins
+const allowedOrigins = ["http://192.168.100.2:3006", "http://localhost:3006", "https://formularios-6d195.web.app", "https://formularios-6d195.firebaseapp.com"] // Add the allowed origins
 
 const corsOptions = {
 	origin: allowedOrigins,
