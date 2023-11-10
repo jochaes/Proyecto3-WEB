@@ -36,11 +36,11 @@ app.use(morgan("dev"))
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
 
-app.get("/", (req, res) => {
-	res.send("Hello World!")
-})
+// app.get("/", (req, res) => {
+// 	res.send("Hello World!")
+// })
 
-app.get("/getForms", async (req, res) => {
+app.get("/api/getForms", async (req, res) => {
 	try {
 		const formsRef = firestore.collection("formularios")
 		const snapshot = await formsRef.get()
@@ -59,7 +59,7 @@ app.get("/getForms", async (req, res) => {
 
 
 
-app.post("/uploadForm", async (req, res) => {
+app.post("/api/uploadForm", async (req, res) => {
 	// console.log("*******")
 	// console.log(req.body)
 	// console.log("*******")
