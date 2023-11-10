@@ -23,7 +23,7 @@ export default {
   methods: {
     async fetchForms() {
       try {
-        const response = await this.$axios.get('/getForms'); // Replace with your API endpoint
+        const response = await this.$axios.get('/api/getForms'); // Replace with your API endpoint
         this.forms = response.data;
       } catch (error) {
         console.error('Error fetching forms:', error);
