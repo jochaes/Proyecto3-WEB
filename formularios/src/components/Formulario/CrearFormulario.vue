@@ -47,35 +47,6 @@ export default {
 				console.error('Error fetching forms:', error);
 			}
 		},
-		agregarCampo() {
-			var formulario = document.getElementById("camposFormulario")
-
-			var nuevoCampo = document.createElement("div")
-			var tipoCampo = document.createElement("select")
-			tipoCampo.innerHTML = `
-                <option value="string">Texto</option>
-                <option value="entero">Entero</option>
-                <option value="combobox">Combobox</option>
-                <option value="matriz">Matriz</option>
-            `
-			var nombreCampo = document.createElement("input")
-			nombreCampo.setAttribute("type", "text")
-			if (tipoCampo.value === "combobox") {
-				nombreCampo.setAttribute("placeholder", "Chars separados por coma")
-			} else {
-				nombreCampo.setAttribute("placeholder", "Nombre del Campo")
-			}
-			nuevoCampo.appendChild(nombreCampo)
-			nuevoCampo.appendChild(tipoCampo)
-
-			// Agregar evento para mostrar opciones o cantidad en base al tipo de campo seleccionado
-			tipoCampo.addEventListener("change", function () {
-				this.mostrarOpcionesOCantidad(tipoCampo.value, nuevoCampo)
-			})
-
-			formulario.appendChild(nuevoCampo)
-		},
-
 		mostrarOpcionesOCantidad(tipoCampo, contenedor) {
 			// Limpiar el contenedor antes de agregar nuevos elementos
 			while (contenedor.childNodes.length > 2) {
@@ -110,38 +81,71 @@ export default {
 			}
 		},
 
-		guardarFormulario() {
-			var nombreFormulario = document.getElementById("nombreFormulario").value
-			if (!nombreFormulario.trim()) {
-				alert("Por favor, ingrese un nombre para el formulario.")
-				return
+		agregarCampo() {
+			var formulario = document.getElementById("camposFormulario")
+
+			var nuevoCampo = document.createElement("div")
+			var tipoCampo = document.createElement("select")
+			tipoCampo.innerHTML = `
+                <option value="string">Texto</option>
+                <option value="entero">Entero</option>
+                <option value="combobox">Combobox</option>
+                <option value="matriz">Matriz</option>
+            `
+			var nombreCampo = document.createElement("input")
+			nombreCampo.setAttribute("type", "text")
+			if (tipoCampo.value === "combobox") {
+				nombreCampo.setAttribute("placeholder", "Chars separados por coma")
+			} else {
+				nombreCampo.setAttribute("placeholder", "Nombre del Campo")
 			}
+			nuevoCampo.appendChild(nombreCampo)
+			nuevoCampo.appendChild(tipoCampo)
 
-			var camposNuevos = document.querySelectorAll("#camposFormulario div")
-
-			var camposFormulario = []
-
-			camposNuevos.forEach(function (campoNuevo) {
-				var nombreCampo = campoNuevo.querySelector("input").value
-				if (!nombreCampo.trim()) {
-					alert("Por favor, ingrese un nombre para todos los campos.")
-					return
-				}
-
-				var tipoCampo = campoNuevo.querySelector("select").value
-				var datosAdicionales = this.obtenerDatosAdicionales(tipoCampo, campoNuevo)
-
-				camposFormulario.push({ nombre_campo: nombreCampo, tipo_campo: tipoCampo, ...datosAdicionales })
+			// Agregar evento para mostrar opciones o cantidad en base al tipo de campo seleccionado
+			tipoCampo.addEventListener("change", () =>{
+				this.mostrarOpcionesOCantidad(tipoCampo.value, nuevoCampo)
 			})
 
-			this.formularios.push({ nombre_formulario: nombreFormulario, campos_formulario: camposFormulario })
-
-			// Limpiar el formulario actual
-			this.limpiarFormulario()
-
-			// Actualizar la lista de formularios guardados
-			this.actualizarListaFormularios()
+			formulario.appendChild(nuevoCampo)
 		},
+
+
+		guardarFormulario() {
+    var nombreFormulario = document.getElementById("nombreFormulario").value
+    if (!nombreFormulario.trim()) {
+        alert("Por favor, ingrese un nombre para el formulario.")
+        return
+    }
+
+    var camposNuevos = document.querySelectorAll("#camposFormulario div")
+
+    var camposFormulario = []
+
+    var self = this; // Almacenar una referencia a 'this'
+
+    camposNuevos.forEach(function (campoNuevo) {
+        var nombreCampo = campoNuevo.querySelector("input").value
+        if (!nombreCampo.trim()) {
+            alert("Por favor, ingrese un nombre para todos los campos.")
+            return
+        }
+
+        var tipoCampo = campoNuevo.querySelector("select").value
+        var datosAdicionales = self.obtenerDatosAdicionales(tipoCampo, campoNuevo)
+
+        camposFormulario.push({ nombre_campo: nombreCampo, tipo_campo: tipoCampo, ...datosAdicionales })
+    })
+
+    this.formularios.push({ nombre_formulario: nombreFormulario, campos_formulario: camposFormulario })
+
+    // Limpiar el formulario actual
+    this.limpiarFormulario()
+
+    // Actualizar la lista de formularios guardados
+    this.actualizarListaFormularios()
+},
+
 
 		verFormularios() {
 			var selectFormularios = document.getElementById("formulariosGuardados")
@@ -174,11 +178,11 @@ export default {
 				selectFormularios.appendChild(option)
 			})
 		},
-
 		limpiarFormulario() {
-			document.getElementById("nombre_formulario").value = ""
-			document.getElementById("campos_formulario").innerHTML = ""
-		},
+    document.getElementById("nombreFormulario").value = ""
+    document.getElementById("camposFormulario").innerHTML = ""
+},
+
 
 		obtenerDatosAdicionales(tipoCampo, contenedor) {
 			switch (tipoCampo) {
