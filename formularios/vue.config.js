@@ -11,5 +11,20 @@ module.exports = defineConfig({
     },
   },
 
+  pwa: {
+    name: 'Formuuuuularios',
+    themeColor: '#4DBA87',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
+
+    manifestOptions: {
+      background_color: '#000000',
+    },
+    workboxOptions: {
+      skipWaiting: true,
+    },
+  },
+
 
 })
