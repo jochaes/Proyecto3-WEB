@@ -4,14 +4,13 @@ import { default } from '../../App.vue';
 		<form id="miFormulario">
 			<label for="nombreFormulario">Nombre del Formulario:</label>
 			<input type="text" id="nombreFormulario" placeholder="Nombre del formulario" />
-			
-			<button type="button" @click="agregarCampo()">Agregar Campo</button>	
-			<button type="button" @click= "guardarFormulario()">Guardar Formulario</button>
+
+			<button type="button" @click="agregarCampo()">Agregar Campo</button>
+			<button type="button" @click="guardarFormulario()">Guardar Formulario</button>
 			<button type="button" @click="verFormularios()">Ver Formularios Guardados</button>
 			<br /><br />
 			<div id="camposFormulario"></div>
 		</form>
-
 
 		<select id="formulariosGuardados" @change="cargarFormularioSeleccionado()" style="display: none">
 			<option value="-1">Seleccione un formulario</option>
@@ -23,7 +22,7 @@ import { default } from '../../App.vue';
 
 <script>
 export default {
-	name: 'CrearFormulario',
+	name: "CrearFormulario",
 	data() {
 		return {
 			formularios: []
@@ -34,17 +33,15 @@ export default {
 		this.fetchFormularios()
 	},
 	methods: {
-		async fetchFormularios(){
+		async fetchFormularios() {
 			try {
-				const response = await this.$axios.get('/api/getForms'); // Replace with your API endpoint
+				const response = await this.$axios.get("/api/getForms") // Replace with your API endpoint
 				console.log(response.data)
 
-				this.formularios = response.data;
+				this.formularios = response.data
 				this.actualizarListaFormularios()
-				
-
 			} catch (error) {
-				console.error('Error fetching forms:', error);
+				console.error("Error fetching forms:", error)
 			}
 		},
 		mostrarOpcionesOCantidad(tipoCampo, contenedor) {
@@ -103,49 +100,67 @@ export default {
 			nuevoCampo.appendChild(tipoCampo)
 
 			// Agregar evento para mostrar opciones o cantidad en base al tipo de campo seleccionado
-			tipoCampo.addEventListener("change", () =>{
+			tipoCampo.addEventListener("change", () => {
 				this.mostrarOpcionesOCantidad(tipoCampo.value, nuevoCampo)
 			})
 
 			formulario.appendChild(nuevoCampo)
 		},
 
+		async guardarFormulario() {
+			var nombreFormulario = document.getElementById("nombreFormulario").value
+			if (!nombreFormulario.trim()) {
+				alert("Por favor, ingrese un nombre para el formulario.")
+				return
+			}
 
-		guardarFormulario() {
-    var nombreFormulario = document.getElementById("nombreFormulario").value
-    if (!nombreFormulario.trim()) {
-        alert("Por favor, ingrese un nombre para el formulario.")
-        return
-    }
+			var camposNuevos = document.querySelectorAll("#camposFormulario div")
 
-    var camposNuevos = document.querySelectorAll("#camposFormulario div")
+			var camposFormulario = []
 
-    var camposFormulario = []
+			var self = this // Almacenar una referencia a 'this'
 
-    var self = this; // Almacenar una referencia a 'this'
+			camposNuevos.forEach(function (campoNuevo) {
+				var nombreCampo = campoNuevo.querySelector("input").value
+				if (!nombreCampo.trim()) {
+					alert("Por favor, ingrese un nombre para todos los campos.")
+					return
+				}
 
-    camposNuevos.forEach(function (campoNuevo) {
-        var nombreCampo = campoNuevo.querySelector("input").value
-        if (!nombreCampo.trim()) {
-            alert("Por favor, ingrese un nombre para todos los campos.")
-            return
-        }
+				var tipoCampo = campoNuevo.querySelector("select").value
+				var datosAdicionales = self.obtenerDatosAdicionales(tipoCampo, campoNuevo)
 
-        var tipoCampo = campoNuevo.querySelector("select").value
-        var datosAdicionales = self.obtenerDatosAdicionales(tipoCampo, campoNuevo)
+				camposFormulario.push({ nombre_campo: nombreCampo, tipo_campo: tipoCampo, ...datosAdicionales })
+			})
 
-        camposFormulario.push({ nombre_campo: nombreCampo, tipo_campo: tipoCampo, ...datosAdicionales })
-    })
+			try {
+				this.$axios
+					.post("/api/uploadForm", {
+						nombre_formulario: nombreFormulario,
+						campos_formulario: camposFormulario
+					})
+					.then(function (response) {
+						console.log(response)
 
-    this.formularios.push({ nombre_formulario: nombreFormulario, campos_formulario: camposFormulario })
+						
 
-    // Limpiar el formulario actual
-    this.limpiarFormulario()
+						this.limpiarFormulario()
+					})
+					.catch(function (error) {
+						return Promise.reject(error)
+					})
+			} catch (error) {
+				console.error("Error saving form:", error)
+			}
+			//Send the form to the API
 
-    // Actualizar la lista de formularios guardados
-    this.actualizarListaFormularios()
-},
+			// this.formularios.push({ nombre_formulario: nombreFormulario, campos_formulario: camposFormulario })
 
+			// Limpiar el formulario actual
+
+			// Actualizar la lista de formularios guardados
+			// this.actualizarListaFormularios()
+		},
 
 		verFormularios() {
 			var selectFormularios = document.getElementById("formulariosGuardados")
@@ -168,7 +183,7 @@ export default {
 
 		actualizarListaFormularios() {
 			var selectFormularios = document.getElementById("formulariosGuardados")
-			
+
 			selectFormularios.innerHTML = "<option value='-1'>Seleccione un formulario</option>"
 
 			this.formularios.forEach(function (formulario, index) {
@@ -179,10 +194,9 @@ export default {
 			})
 		},
 		limpiarFormulario() {
-    document.getElementById("nombreFormulario").value = ""
-    document.getElementById("camposFormulario").innerHTML = ""
-},
-
+			document.getElementById("nombreFormulario").value = ""
+			document.getElementById("camposFormulario").innerHTML = ""
+		},
 
 		obtenerDatosAdicionales(tipoCampo, contenedor) {
 			switch (tipoCampo) {

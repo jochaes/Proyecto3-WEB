@@ -75,30 +75,104 @@ app.get("/api/getForms", async (req, res) => {
 	}
 })
 
+//Ruta para Obtener un formulario por su ID en el body
+// app.get("/api/getForm", async (req, res) => {
+// 	const { id } = req.body
+
+// 	try {
+// 		const formsRef = firestore.collection("formularios")
+// 		const snapshot = await formsRef.doc(id).get()
+// 		const form = snapshot.data()
+
+// 		res.status(200).json(form)
+// 	} catch (error) {
+// 		console.error('Error getting form:', error);
+// 		res.status(500).json({ error: 'Internal Server Error' });
+// 	}
+// })
+
+app.get("/api/getForm", async (req, res) => {
+	const { id } = req.query; // Use req.query to get the id from the URL parameters
+
+	try {
+			const formsRef = firestore.collection("formularios");
+			const snapshot = await formsRef.doc(id).get();
+			const form = snapshot.data();
+			res.status(200).json(form);
+	} catch (error) {
+			console.error('Error getting form:', error);
+			res.status(500).json({ error: 'Internal Server Error' });
+	}
+});
+
 // Ruta para obtener un formulario por su ID
 app.post("/api/uploadForm", async (req, res) => {
 
-	const { nombre_formulario, campos_formulario } = req.body
+	const { respuestaFormulario } = req.body
 
 	try {
-		const formsRef = firestore.collection("formularios")
+		const formsRef = firestore.collection("repuestas")
 
-    const result = await formsRef.add({
-      nombre_formulario: nombre_formulario,
-			campos_formulario: campos_formulario,
-			fecha_creacion: new Date().toISOString()
-    });
+		respuestaFormulario.fecha_creacion = new Date().toISOString()
+
+    const result = await formsRef.add(respuestaFormulario);
 
     console.log(`Form uploaded with ID: ${result.id}`);
     res.status(200).json({ message: 'Form uploaded successfully' });
-
-
 	} catch (error) {
     console.error('Error uploading form:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 
 })
+
+//Rutarpara guardar la respuesta de un formulario con la referencia del formulario
+app.post("/api/uploadAnswer", async (req, res) => {
+
+	const { id_formulario, campos_formulario} = req.body
+
+	try {
+		const formsRef = firestore.collection("respuestas")
+
+		const result = await formsRef.add({
+			id_formulario: id_formulario,
+			campos_formulario: campos_formulario,
+			fecha_creacion: new Date().toISOString()
+		});
+
+		console.log(`Answer uploaded with ID: ${result.id}`);
+		res.status(200).json({ message: 'Answer uploaded successfully' });
+	} catch (error) {
+		console.error('Error uploading answer:', error);
+		res.status(500).json({ error: 'Internal Server Error' });
+	}
+
+})
+
+//Ruta para obtener todas las respuestas de un formulario por su ID
+app.post("/api/getAnswers", async (req, res) => {
+	const { id } = req.body
+
+	try {
+		const formsRef = firestore.collection("respuestas")
+		const snapshot = await formsRef.where("id_formulario", "==", id).get()
+		const answers = []
+
+		snapshot.forEach((doc) => {
+			answers.push({ id: doc.id, ...doc.data() })
+		})
+
+		res.status(200).json(answers)
+	} catch (error) {
+		console.error('Error getting answers:', error);
+		res.status(500).json({ error: 'Internal Server Error' });
+	}
+})
+
+
+
+
+
 
 
 
