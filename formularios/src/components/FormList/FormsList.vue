@@ -21,11 +21,12 @@
 						</button>
 
 						<button>
-							<router-link to="/forms-list"> Ver Respuestas </router-link>
+							<router-link :to="{ path: '/respuestas/', query: { id: form.id } }"> Ver Respuestas  </router-link>
 						</button>
 
-						<button>
-							<router-link to="/forms-list"> Compartir </router-link>
+						<button @click="showShareLinkDialog(form.id)" >
+							<!-- <router-link to="/forms-list"> Compartir </router-link> -->
+							Compartir
 						</button>
 					</div>
 				</div>
@@ -67,6 +68,11 @@ export default {
 			} catch (error) {
 				console.error("Error fetching forms:", error)
 			}
+		},
+		showShareLinkDialog(id) {
+			
+			alert(`Compartir este link con el usuario: ${document.location.origin}/#/formulario-respuesta/?id=${id}`)
+
 		},
 
 		showDialog( form ) {

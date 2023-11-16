@@ -1,7 +1,7 @@
 import { default } from '../Formulario/CrearFormulario.vue';
 <template>
 	<div id="respuestaFormularioContainer">
-		<div id="buscarFormulario_input">
+		<!-- <div id="buscarFormulario_input">
 			<label for="buscarFormulario">Ingrese el Id del Formulario</label>
 			<input
 				type="text"
@@ -10,7 +10,7 @@ import { default } from '../Formulario/CrearFormulario.vue';
 				placeholder="Buscar Formulario"
 				value="KLpu2UqKiV3lavgqR8gr" />
 			<button @click="cargarFormulario">Cargar fomulario</button>
-		</div>
+		</div> -->
 
 		<div id="respuestaFormulario"></div>
 	</div>
@@ -18,9 +18,10 @@ import { default } from '../Formulario/CrearFormulario.vue';
 
 <script>
 export default {
-	name: "RespuestaFormulario",
+	name: "FormularioRespuesta",
 	data() {
 		return {
+			formId : null,
 			formulariosJSON: {},
 			datosGuardados: [],
 			container: document.getElementById("respuestaFormulario"),
@@ -31,14 +32,20 @@ export default {
 	},
 
 	mounted() {
+		this.formId = this.$route.query.id
+		this.cargarFormulario()
 		this.initRespuesta()
 	},
 
 	methods: {
 		cargarFormulario: async function () {
-			const formularioId = document.getElementById("buscarFormulario").value
-
+			const formularioId = this.formId
 			console.log(formularioId)
+
+			if(formularioId === null){
+				alert("Formulario no existe")
+				return
+			}
 
 			//Llamar al API que me devuelva el formulario con el id seleccionado
 			try {
@@ -55,6 +62,9 @@ export default {
 				this.mostrarCamposFormulario()
 			} catch (error) {
 				console.error("Error fetching forms:", error)
+
+				alert("Formulario no existe")
+				return
 			}
 		},
 

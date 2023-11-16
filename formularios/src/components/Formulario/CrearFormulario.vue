@@ -109,6 +109,7 @@ export default {
 
 		async guardarFormulario() {
 			var nombreFormulario = document.getElementById("nombreFormulario").value
+			
 			if (!nombreFormulario.trim()) {
 				alert("Por favor, ingrese un nombre para el formulario.")
 				return

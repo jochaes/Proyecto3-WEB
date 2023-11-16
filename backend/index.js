@@ -110,6 +110,8 @@ app.post("/api/uploadForm", async (req, res) => {
 
 	const { respuestaFormulario } = req.body
 
+	console.log(respuestaFormulario)
+
 	try {
 		const formsRef = firestore.collection("repuestas")
 
@@ -149,17 +151,21 @@ app.post("/api/uploadAnswer", async (req, res) => {
 
 })
 
+
 //Ruta para obtener todas las respuestas de un formulario por su ID
-app.post("/api/getAnswers", async (req, res) => {
-	const { id } = req.body
+app.get("/api/getAnswers", async (req, res) => {
+	const { id } = req.query
 
 	try {
-		const formsRef = firestore.collection("respuestas")
+		const formsRef = firestore.collection("repuestas")
 		const snapshot = await formsRef.where("id_formulario", "==", id).get()
+		console.log(snapshot)
+
 		const answers = []
 
 		snapshot.forEach((doc) => {
 			answers.push({ id: doc.id, ...doc.data() })
+
 		})
 
 		res.status(200).json(answers)
@@ -168,7 +174,6 @@ app.post("/api/getAnswers", async (req, res) => {
 		res.status(500).json({ error: 'Internal Server Error' });
 	}
 })
-
 
 
 
