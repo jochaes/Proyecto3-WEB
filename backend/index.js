@@ -109,9 +109,7 @@ app.get("/api/getForm", async (req, res) => {
 app.post("/api/uploadAnswer", async (req, res) => {
 
 	const { respuestaFormulario } = req.body
-
 	console.log(respuestaFormulario)
-
 	try {
 		const formsRef = firestore.collection("repuestas")
 
@@ -125,7 +123,6 @@ app.post("/api/uploadAnswer", async (req, res) => {
     console.error('Error uploading form:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-
 })
 
 

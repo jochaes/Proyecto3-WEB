@@ -6,7 +6,7 @@
   </div> -->
 
   <div class="nav-bar">
-    <router-link to="/forms-list">Forms List</router-link>
+    <router-link to="/forms-list">Ver Formularios</router-link>
     <router-link to="/crear-formulario">Crear Formulario</router-link>
     
     <!-- <router-link to="/formulario-respuesta">Formulario Respuesta</router-link> -->

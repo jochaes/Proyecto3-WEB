@@ -21,7 +21,7 @@ export default {
 	name: "FormularioRespuesta",
 	data() {
 		return {
-			formId : null,
+			formId: null,
 			formulariosJSON: {},
 			datosGuardados: [],
 			container: document.getElementById("respuestaFormulario"),
@@ -42,7 +42,7 @@ export default {
 			const formularioId = this.formId
 			console.log(formularioId)
 
-			if(formularioId === null){
+			if (formularioId === null) {
 				alert("Formulario no existe")
 				return
 			}
@@ -145,7 +145,14 @@ export default {
 					})
 					this.camposContainer.appendChild(labelElement)
 					this.camposContainer.appendChild(selectElement)
-				} else {
+				} else if(campo.tipo_campo === "matriz" ){
+
+
+					this.generarTablaFilasFijas(campo.columnas, campo.nombre_campo)
+
+				}
+				
+				else {
 					this.camposContainer.appendChild(labelElement)
 					this.camposContainer.appendChild(inputElement)
 				}
@@ -157,6 +164,33 @@ export default {
 			guardarButton.textContent = "Guardar Respuestas"
 			guardarButton.addEventListener("click", this.guardarRespuestas)
 			this.camposContainer.appendChild(guardarButton)
+		},
+		generarTablaFilasFijas(columnas, campo) {
+			const divContenedor = document.createElement("div")
+			divContenedor.id = "tabla-container"
+			this.camposContainer.appendChild(divContenedor)
+
+			const tablaContainer = document.getElementById("tabla-container")
+			
+			const tabla = document.createElement("table")
+			const tablaCaption = document.createElement("caption")
+			tablaCaption.textContent = campo
+			tabla.appendChild(tablaCaption)
+			const encabezado = document.createElement("thead")
+			const cuerpo = document.createElement("tbody")
+
+			// Crear la fila de encabezado
+			const filaEncabezado = document.createElement("tr")
+			columnas.forEach(columna => {
+				const celdaEncabezado = document.createElement("th")
+				celdaEncabezado.textContent = columna
+				filaEncabezado.appendChild(celdaEncabezado)
+			})
+			encabezado.appendChild(filaEncabezado)
+			tabla.appendChild(encabezado)
+
+			tabla.appendChild(cuerpo)
+			tablaContainer.appendChild(tabla)
 		},
 		async guardarRespuestas() {
 			const formularioId = this.formulariosJSON
@@ -188,8 +222,10 @@ export default {
 
 				//Limpiar campos anteriores
 				this.camposContainer.innerHTML = ""
+				alert("Gracias por responder el formulario")
 			} catch (error) {
 				console.error("Error fetching forms:", error)
+				alert("Error al enviar el formulario")
 			}
 
 			// Puedes hacer lo que desees con las respuestas, por ejemplo, almacenarlas en una base de datos
@@ -214,16 +250,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
 #respuestaFormularioContainer {
 	font-family: Arial, sans-serif;
 	margin: 20px;
 }
 
-#app {
+/* #app {
 	max-width: 600px;
 	margin: 0 auto;
-}
+} */
 
 form {
 	margin-bottom: 20px;
@@ -269,4 +305,17 @@ h2 {
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 10px;
 }
+
+/* estilos para la tabla */
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td {
+	text-align: left;
+	padding: 8px;
+	background-color: aqua;
+}
+
 </style>

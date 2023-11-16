@@ -2,7 +2,7 @@
 
 <template>
 	<div>
-		<h2>Forms List</h2>
+		<h2>Lista de Formularios</h2>
 
 		<ul class="lista-formularios">
 			<li class="item-formulario" v-for="form in forms" :key="form.id">

@@ -47,6 +47,14 @@ export default {
 		mostrarRespuestas: function () {
 			this.respuestasContainer.innerHTML = ""
 
+			if (this.respuestasJSON.length === 0) {
+				const noRespuestasElement = document.createElement("h2")
+				noRespuestasElement.textContent = "No hay respuestas para este formulario"
+				this.respuestasContainer.appendChild(noRespuestasElement)
+				return
+				
+			}
+
 			this.respuestasJSON.forEach(respuesta => {
 
 				const formularioId = respuesta.nombre_formulario
@@ -70,7 +78,7 @@ export default {
 				const fechaElement = document.createElement("h3")
 				fechaElement.textContent = `Fecha de Respuesta: ${respuesta.fecha_creacion}`
 				formularioElement.appendChild(fechaElement)
-				
+
 
 				// Mostrar cada pregunta con su respuesta
 				const respuestasElement = document.createElement("ul")
