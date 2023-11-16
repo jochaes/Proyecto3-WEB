@@ -1,41 +1,46 @@
-Proyecto 3 
+# Proyecto 3
 
+¡Bienvenido al Proyecto 3! Este repositorio contiene tanto el backend como el frontend de la aplicación. Antes de comenzar, asegúrate de seguir estos pasos iniciales:
 
-*** Si es la primera vez, debe hacer 
-  $npm i 
-*** Tanto en el backend como en el frontend
+### Configuración inicial
+Si es la primera vez que trabajas en este proyecto, ejecuta el siguiente comando tanto en el directorio del backend como en el del frontend para instalar las dependencias necesarias:
 
+$ npm i
 
-Para Ejecutar Localmente:
-  *Desde consola ir al directorio backend y ejecutar: 
+### Ejecución local
 
-  $npm run dev 
+#### Backend
+Desde la consola, ve al directorio del backend y ejecuta el siguiente comando para iniciar el servidor local:
 
-  Esto inicializa el backedn en el puerto 3001
+$ npm run dev
 
-  *Con el backend ya inicializado, inicialicar la aplicación VUE
-  En consola ir al directorio de formularios 
-  y ejecutar con:
+Esto inicializa el backend en el puerto 3001.
 
-  $vue serve
+#### Frontend
+Una vez que el backend esté en funcionamiento, dirígete al directorio de formularios desde la consola y ejecuta:
 
-  Esto inicializa el server del frontend en el puerto 3006
+$ vue serve
 
+Esto inicia el servidor del frontend en el puerto 3006.
 
-Para hacer deploy del full stack 
+### Deploy del Full Stack
 
-1. Backend: 
-  Ir al dashboard de render y hacer un deploy manual (Se hace deploy del último commit)
+#### 1. Backend
+Para desplegar el backend, dirígete al dashboard de Render y realiza un deploy manual. Esto desplegará la última versión del commit.
 
-2. frontend
+#### 2. Frontend
+Para desplegar el frontend, sigue estos pasos:
 
-  Ir al directorio de formularios 
-  2.1 Crear el build con npm buil, esto actualiza la carpeta dist
-    $npm build 
-  
-  2.2 Desplegar la aplicacion en el hosting de firebase (Esto toma el dist y lo sube)
-    $firebase deploy
+##### 2.1 Crear el build
+En el directorio de formularios, ejecuta el siguiente comando para crear el build y actualizar la carpeta 'dist':
 
+$ npm run build
 
+##### 2.2 Desplegar en Firebase
+Despliega la aplicación en el hosting de Firebase ejecutando:
 
+$ firebase deploy
 
+Esto toma la carpeta 'dist' generada en el paso anterior y la sube al hosting de Firebase.
+
+¡Listo! Tu aplicación Full Stack está ahora desplegada y lista para ser utilizada. ¡Gracias por ser parte de este proyecto!
