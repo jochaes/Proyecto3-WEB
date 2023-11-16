@@ -208,6 +208,7 @@ export default {
 #respuestaFormularioContainer {
 	font-family: Arial, sans-serif;
 	margin: 20px;
+	max-width: 600px;
 }
 
 #app {
