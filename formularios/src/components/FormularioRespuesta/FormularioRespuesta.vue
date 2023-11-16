@@ -180,7 +180,7 @@ export default {
 			try {
 				//Enviar el formulario seleccionado al API, pero enviandole el id por el body
 
-				const response = await this.$axios.post("/api/uploadForm", {
+				const response = await this.$axios.post("/api/uploadAnswer", {
 					respuestaFormulario: respuestas
 				})
 
