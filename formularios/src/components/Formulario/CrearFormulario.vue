@@ -109,6 +109,7 @@ export default {
 
 		async guardarFormulario() {
 			var nombreFormulario = document.getElementById("nombreFormulario").value
+			
 			if (!nombreFormulario.trim()) {
 				alert("Por favor, ingrese un nombre para el formulario.")
 				return
@@ -141,16 +142,16 @@ export default {
 					})
 					.then(function (response) {
 						console.log(response)
-
-						
-
-						this.limpiarFormulario()
 					})
 					.catch(function (error) {
 						return Promise.reject(error)
 					})
+
+				this.limpiarFormulario()
 			} catch (error) {
 				console.error("Error saving form:", error)
+				alert("Error al guardar el formulario.")
+				
 			}
 			//Send the form to the API
 
@@ -193,6 +194,7 @@ export default {
 				selectFormularios.appendChild(option)
 			})
 		},
+
 		limpiarFormulario() {
 			document.getElementById("nombreFormulario").value = ""
 			document.getElementById("camposFormulario").innerHTML = ""
